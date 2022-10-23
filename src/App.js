@@ -17,16 +17,20 @@ const INITIAL_DATA = {
 
 export default function App() {
   const [data, setData] = useState(INITIAL_DATA);
+  const updateFields = (fields) => {
+    setData({ ...data, ...fields });
+  };
   const { steps, currentStepIndex, step, isFirstStep, back, next, isLastStep } =
     useMultistepForm([
-      <UserForm {...data} />,
-      <AddressForm {...data} />,
-      <AccountForm {...data} />,
+      <UserForm {...data} updateFields={updateFields} />,
+      <AddressForm {...data} updateFields={updateFields} />,
+      <AccountForm {...data} updateFields={updateFields} />,
     ]);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    next();
+    if (!isLastStep) return next();
+    alert("Successfull Account Creation");
   };
   return (
     <div
@@ -38,6 +42,7 @@ export default function App() {
         margin: "1rem",
         borderRadius: "0.5rem",
         fontFamily: "Arial",
+        maxWidth: "max-content",
       }}
     >
       <form onSubmit={onSubmit}>
